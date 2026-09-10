@@ -1,0 +1,33 @@
+[build-system]
+requires = ["setuptools>=77"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "stepagent-terminal"
+dynamic = ["version"]
+description = "Live terminal observability for local Codex sessions"
+readme = "README.md"
+license = "MIT"
+license-files = ["LICENSE"]
+requires-python = ">=3.10"
+dependencies = ["windows-curses>=2.4; sys_platform == 'win32'"]
+keywords = ["codex", "terminal", "observability", "jsonl"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Environment :: Console :: Curses",
+    "Operating System :: Microsoft :: Windows",
+    "Operating System :: MacOS",
+    "Operating System :: POSIX :: Linux",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3 :: Only",
+]
+
+[project.scripts]
+stepagent-terminal = "stepagent.__main__:main"
+stepagent-demo = "stepagent.demo:main"
+
+[tool.setuptools.dynamic]
+version = {attr = "stepagent.__version__"}
+
+[tool.setuptools.packages.find]
+include = ["stepagent*"]

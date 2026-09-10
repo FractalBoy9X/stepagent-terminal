@@ -1,0 +1,32 @@
+# Python and local build output
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+*.egg-info/
+build/
+dist/
+.pytest_cache/
+.ruff_cache/
+.coverage*
+htmlcov/
+
+# Local credentials, sessions and editor/OS state
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.jsonl
+*.log
+.codex/
+.claude/
+sessions/
+session_index.jsonl
+auth.json
+.DS_Store
+._*
+Thumbs.db
+Desktop.ini
+.idea/
+.vscode/

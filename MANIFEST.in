@@ -1,0 +1,5 @@
+include LICENSE README.md CONTRIBUTING.md run.py run.sh run.ps1 demo.py uv.lock
+recursive-include docs *.md
+recursive-include tests *.py
+global-exclude ._* *.py[cod]
+prune tests/__pycache__
