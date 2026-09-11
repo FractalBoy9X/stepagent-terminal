@@ -1,13 +1,13 @@
 # StepAgent Terminal
 
-Terminalowy podgląd lokalnych sesji Codexa: prompty, aktywność agenta,
-wywołania narzędzi i ich wyniki, poprawki plików oraz odpowiedzi końcowe.
+Live terminal viewer for local Codex sessions. Inspect prompts, agent activity,
+tool calls and results, file diffs, relationships, and final responses.
 
-Działa na macOS, Linuxie i Windowsie z Pythonem 3.10+.
+Runs on macOS, Linux, and Windows with Python 3.10+.
 
-## Instalacja
+## Install
 
-Sklonuj repozytorium i uruchom polecenia w jego katalogu.
+Clone the repository and run these commands from its directory.
 
 ### macOS / Linux
 
@@ -25,39 +25,37 @@ py -3 -m venv .venv
 .venv\Scripts\stepagent-terminal.exe
 ```
 
-Na Windowsie instalacja dołącza `windows-curses`. Potrzebny jest terminal
-obsługujący Unicode. Aktywowanie środowiska wirtualnego nie jest wymagane.
+Windows installs `windows-curses` automatically. Use a Unicode-capable terminal.
+Virtual-environment activation is optional. Checkout launchers are also available:
+`sh run.sh --latest`, `python run.py --latest`, and `.\run.ps1 --latest`.
 
-Możesz też użyć launcherów z katalogu repozytorium: `sh run.sh --latest`,
-`python run.py --latest` lub `.\run.ps1 --latest`.
+## Session logs
 
-## Wybór logów sesji
-
-Program nie zawiera ścieżki zależnej od konkretnego komputera. Katalog jest
-wybierany w tej kolejności:
+No machine-specific log path is built in. The session directory is selected in
+this order:
 
 1. `--sessions-dir DIRECTORY`
-2. zmienna `CODEX_SESSIONS_DIR`
+2. `CODEX_SESSIONS_DIR`
 3. `CODEX_HOME/sessions`
-4. `.codex/sessions` w katalogu domowym bieżącego użytkownika
+4. `.codex/sessions` under the current user's home directory
 
-Obsługiwane są `~`, zmienne środowiskowe, ścieżki względne, spacje i Unicode.
-Program skanuje zagnieżdżone pliki `*.jsonl` i niczego w nich nie modyfikuje.
+Paths support `~`, environment variables, spaces, Unicode, and relative paths.
+The reader scans nested `*.jsonl` files and never modifies them.
 
 ```sh
 stepagent-terminal --latest
 stepagent-terminal --list
-stepagent-terminal --session ID_LUB_FRAGMENT
+stepagent-terminal --session ID_OR_FRAGMENT
 stepagent-terminal --file "path/to/rollout.jsonl"
 stepagent-terminal --snapshot --file "path/to/rollout.jsonl"
 stepagent-terminal --sessions-dir "path/to/sessions"
 ```
 
-`--latest` wybiera sesję raz. `--snapshot` wypisuje jednorazowy JSON i działa
-bez interaktywnego terminala. Domyślny interwał odczytu to 0,25 s; można go
-zmienić przez `--interval` (minimum 0,05 s).
+`--latest` selects a session once. `--snapshot` emits one JSON snapshot without
+an interactive terminal. The default polling interval is 0.25 seconds; change it
+with `--interval` (minimum 0.05 seconds).
 
-Przykładowa konfiguracja:
+Example configuration:
 
 ```sh
 export CODEX_SESSIONS_DIR="$HOME/my-session-logs"
@@ -67,63 +65,61 @@ export CODEX_SESSIONS_DIR="$HOME/my-session-logs"
 $env:CODEX_SESSIONS_DIR = Join-Path $HOME 'my-session-logs'
 ```
 
-## Sterowanie
+## Controls
 
-Wygodny rozmiar okna to co najmniej 120 × 35 znaków; minimum to 42 × 12.
+A comfortable terminal size is 120×35; the minimum is 42×12.
 
-| Klawisz | Działanie |
+| Key | Action |
 | --- | --- |
-| `s` | wybór sesji |
-| `↑` / `↓`, `j` / `k` | wybór kroku lub przewijanie szczegółów |
-| `←` / `→` | fokus osi / szczegółów |
-| `d`, `Enter` | szczegóły pełnoekranowe |
-| `1` / `2` / `3` / `4` | treść / pola / relacje / RAW |
-| `a`, `r` | wszystkie warstwy / przełącz RAW |
-| `u` | odśwież przypięte szczegóły |
-| `Space`, `f` | podążaj za nowymi krokami |
-| `g` / `G` | pierwszy / najnowszy krok |
-| `[` / `]`, `t` | poprzednia / następna tura; filtr tury |
-| `/` | wyszukiwanie; `Enter` zachowuje filtr |
-| `Tab`, `m` | oś kroków / macierz aktywności |
-| `Esc` | powrót lub wyczyszczenie filtra |
-| `?` | pomoc |
-| `q`, `Ctrl+C` | wyjście |
+| `s` | select a session |
+| `↑` / `↓`, `j` / `k` | select a step or scroll details |
+| `←` / `→` | focus timeline or details |
+| `d`, `Enter` | open full-screen details |
+| `1` / `2` / `3` / `4` | content / fields / relationships / raw JSON |
+| `a`, `r` | all layers / toggle raw view |
+| `u` | refresh pinned details |
+| `Space`, `f` | follow new steps / browse history |
+| `g` / `G` | first / newest step |
+| `[` / `]`, `t` | previous / next turn; filter to selected turn |
+| `/` | search; `Enter` keeps the filter |
+| `Tab`, `m` | timeline / activity matrix |
+| `Esc` | go back or clear the filter |
+| `?` | help |
+| `q`, `Ctrl+C` | quit |
 
-The full guide is available in [English](docs/usage.md); the original Polish
-version is also available in [docs/usage.pl.md](docs/usage.pl.md).
+See the [full English guide](docs/usage.md) or the [Polish guide](docs/usage.pl.md).
 
 ## Demo
 
-Demo tworzy syntetyczny log w katalogu tymczasowym systemu:
+Generate a synthetic log in the system temporary directory:
 
 ```sh
 stepagent-demo --delay 1 --turns 3
 ```
 
-Następnie uruchom polecenie wyświetlone przez demo w drugim terminalu.
-Demo nie czyta ani nie zmienia prawdziwych sesji.
+Run the command printed by the demo in a second terminal. The demo never reads
+or changes real sessions.
 
-## Prywatność i ograniczenia
+## Privacy and limits
 
-Program działa lokalnie, tylko do odczytu. Nie wysyła danych do sieci, nie
-wykonuje poleceń znalezionych w logach i nie wymaga klucza API. Logi mogą
-zawierać prywatne prompty oraz argumenty narzędzi — przed udostępnieniem ekranu
-lub pliku usuń wrażliwe treści.
+The application is local and read-only. It sends no network requests, never
+executes commands found in logs, and requires no API key. Logs may contain
+private prompts and tool arguments; review them before sharing screens or files.
 
-To obserwator zapisanego pliku JSONL, a nie strumień tokenów modelu. Niepełne
-wiersze czekają na znak nowej linii; uszkodzone są pomijane z licznikiem.
-Obcięcie lub podmiana pliku odbudowuje stan. Duże logi zwiększają zużycie pamięci.
+This observes a saved JSONL file rather than a model token stream. Incomplete
+lines wait for a newline, malformed records are skipped with a count, and file
+truncation or replacement rebuilds the state. Large logs use more memory.
 
-## Sprawdzanie
+## Verify
 
 ```sh
 python -m unittest discover -s tests -v
 python -m build
 ```
 
-GitHub Actions uruchamia testy i budowanie paczki na Windowsie, macOS i Linuxie
-z Pythonem 3.10 oraz 3.14.
+GitHub Actions tests and builds the package on Windows, macOS, and Linux with
+Python 3.10 and 3.14.
 
-## Licencja
+## License
 
-MIT — szczegóły w [LICENSE](LICENSE).
+MIT — see [LICENSE](LICENSE).
