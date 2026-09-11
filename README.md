@@ -89,7 +89,8 @@ Wygodny rozmiar okna to co najmniej 120 × 35 znaków; minimum to 42 × 12.
 | `?` | pomoc |
 | `q`, `Ctrl+C` | wyjście |
 
-Pełny opis znajduje się w [polskiej instrukcji](docs/usage.pl.md).
+The full guide is available in [English](docs/usage.md); the original Polish
+version is also available in [docs/usage.pl.md](docs/usage.pl.md).
 
 ## Demo
 
